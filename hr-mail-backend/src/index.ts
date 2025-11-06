@@ -1,13 +1,13 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express, { Request, Response } from "express";
 import multer from "multer";
 import nodemailer from "nodemailer";
 import path from "path";
 import fs from "fs"
 import cors from "cors";
+import dotenv from "dotenv";
 
+
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
