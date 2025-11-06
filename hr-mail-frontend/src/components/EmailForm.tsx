@@ -1,7 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { EmailData } from "@/pages/Index";
 
 interface EmailFormProps {
@@ -18,23 +24,34 @@ const EMAIL_TYPES = [
 ];
 
 export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
-  const updateField = (field: keyof EmailData, value: string) => {
+  const updateField = (field: keyof EmailData, value: string | File[]) => {
     setEmailData({ ...emailData, [field]: value });
   };
 
-  const showPositionField = ["INTERVIEW TIMING", "LETTERS"].includes(emailData.TYPE);
+  const showPositionField = ["INTERVIEW TIMING", "LETTERS"].includes(
+    emailData.TYPE
+  );
   const showInterviewFields = emailData.TYPE === "INTERVIEW TIMING";
   const showDeadlineField = emailData.TYPE === "PROVIDE";
+  const showAttachmentField = ["PROVIDE", "LETTERS"].includes(emailData.TYPE);
 
   return (
     <Card className="p-6 shadow-[var(--shadow-medium)] transition-[var(--transition-smooth)]">
-      <h2 className="mb-6 text-xl font-semibold text-foreground">Email Details</h2>
-      
+      <h2 className="mb-6 text-xl font-semibold text-foreground">
+        Email Details
+      </h2>
+
       <div className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="type">Email Type *</Label>
-          <Select value={emailData.TYPE} onValueChange={(value) => updateField("TYPE", value)}>
-            <SelectTrigger id="type" className="transition-[var(--transition-smooth)]">
+          <Select
+            value={emailData.TYPE}
+            onValueChange={(value) => updateField("TYPE", value)}
+          >
+            <SelectTrigger
+              id="type"
+              className="transition-[var(--transition-smooth)]"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -67,8 +84,8 @@ export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
               placeholder="applicant@example.com"
               value={emailData.EMAIL}
               onChange={(e) => {
-                updateField("EMAIL", e.target.value);
-                updateField("to", e.target.value);
+                const value = e.target.value;
+                setEmailData({ ...emailData, EMAIL: value, to: value });
               }}
               className="transition-[var(--transition-smooth)]"
             />
@@ -88,7 +105,9 @@ export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
 
         {showPositionField && (
           <div className="space-y-2">
-            <Label htmlFor="position">Position {showPositionField && "*"}</Label>
+            <Label htmlFor="position">
+              Position {showPositionField && "*"}
+            </Label>
             <Input
               id="position"
               placeholder="e.g., Software Engineer"
@@ -127,8 +146,14 @@ export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
 
             <div className="space-y-2">
               <Label htmlFor="mode">Interview Mode *</Label>
-              <Select value={emailData.MODE || ""} onValueChange={(value) => updateField("MODE", value)}>
-                <SelectTrigger id="mode" className="transition-[var(--transition-smooth)]">
+              <Select
+                value={emailData.MODE || ""}
+                onValueChange={(value) => updateField("MODE", value)}
+              >
+                <SelectTrigger
+                  id="mode"
+                  className="transition-[var(--transition-smooth)]"
+                >
                   <SelectValue placeholder="Select mode" />
                 </SelectTrigger>
                 <SelectContent>
@@ -151,6 +176,46 @@ export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
               onChange={(e) => updateField("DEADLINE", e.target.value)}
               className="transition-[var(--transition-smooth)]"
             />
+          </div>
+        )}
+
+        {showAttachmentField && (
+          <div className="space-y-2">
+            <Label htmlFor="attachments">Attach Documents</Label>
+            <Input
+              id="attachments"
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.jpg,.png"
+              onChange={(e) =>
+                updateField("ATTACHMENTS", Array.from(e.target.files || []))
+              }
+              className="transition-[var(--transition-smooth)]"
+            />
+            {emailData.ATTACHMENTS && emailData.ATTACHMENTS.length > 0 && (
+              <ul className="text-sm text-muted-foreground mt-2 space-y-1">
+                {emailData.ATTACHMENTS.map((file, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center justify-between bg-muted/30 px-3 py-1 rounded-md"
+                  >
+                    <span className="truncate max-w-[200px]">{file.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newFiles = emailData.ATTACHMENTS?.filter(
+                          (_, idx) => idx !== i
+                        );
+                        updateField("ATTACHMENTS", newFiles);
+                      }}
+                      className="text-red-500 hover:text-red-600 text-xs font-medium"
+                    >
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
 

@@ -16,6 +16,7 @@ export interface EmailData {
   DEADLINE?: string;
   COMPANY: string;
   ADDITIONAL_NOTES?: string;
+  ATTACHMENTS?: File[];
 }
 
 const Index = () => {

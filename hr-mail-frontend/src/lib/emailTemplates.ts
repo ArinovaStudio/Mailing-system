@@ -97,23 +97,24 @@ HR Team`,
 
 function replacePlaceholders(template: string, data: EmailData): string {
   let result = template;
-  
+
   // Replace all placeholders
   Object.entries(data).forEach(([key, value]) => {
     const placeholder = `{{${key}}}`;
     result = result.replace(new RegExp(placeholder, "g"), value || "");
   });
-  
+
   return result;
 }
 
 export function renderEmail(data: EmailData) {
   const template = templates[data.TYPE] || fallbackTemplate;
-  
+
   return {
     to: data.to,
     subject: replacePlaceholders(template.subject, data),
     plaintext: replacePlaceholders(template.plaintext, data),
     html: replacePlaceholders(template.html, data),
+    ATTACHMENTS: data.ATTACHMENTS || [],
   };
 }
