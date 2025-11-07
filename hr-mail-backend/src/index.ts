@@ -77,7 +77,7 @@ app.post("/api/mail/send", upload.single("file"), async (req, res) => {
     res.json({ success: true, message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending mail:", error);
-    res.status(500).json({ success: false, message: "Failed to send email" });
+    res.status(500).json({ success: false, message: "Failed to send email", error: error });
   }
 });
 
