@@ -92,17 +92,6 @@ export const EmailForm = ({ emailData, setEmailData }: EmailFormProps) => {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="company">Company Name *</Label>
-          <Input
-            id="company"
-            placeholder="e.g., Acme Tech"
-            value={emailData.COMPANY}
-            onChange={(e) => updateField("COMPANY", e.target.value)}
-            className="transition-[var(--transition-smooth)]"
-          />
-        </div>
-
         {showPositionField && (
           <div className="space-y-2">
             <Label htmlFor="position">

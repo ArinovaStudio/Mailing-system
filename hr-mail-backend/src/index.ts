@@ -32,7 +32,9 @@ const upload = multer({
 
 // Initialize transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -50,7 +52,7 @@ app.post("/api/mail/send", upload.single("file"), async (req, res) => {
     }
 
     const mail: any = {
-      from: `"HR Bot" <${process.env.EMAIL_USER}>`,
+      from: `"HR - Arinova Studio" <${process.env.EMAIL_USER}>`,
       to: data.to,
       subject: data.subject,
       html: data.html,

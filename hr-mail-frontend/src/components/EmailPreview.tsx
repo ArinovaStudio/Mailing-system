@@ -71,7 +71,7 @@ export const EmailPreview = ({ renderedEmail }: EmailPreviewProps) => {
       toast.success("Email sent successfully!");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to send email. Please try again.");
+      toast.error("Error -", error);
     } finally {
       setIsSending(false);
     }

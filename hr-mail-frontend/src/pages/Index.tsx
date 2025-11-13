@@ -25,7 +25,7 @@ const Index = () => {
     NAME: "",
     EMAIL: "",
     TYPE: "SHORTLISTED",
-    COMPANY: "",
+    COMPANY: "Arinova Studio",
   });
 
   const renderedEmail = renderEmail(emailData);
